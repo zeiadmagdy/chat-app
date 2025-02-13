@@ -32,20 +32,26 @@ const MessageInput = () => {
     e.preventDefault();
     if (!text.trim() && !imagePreview) return;
 
-    try {
-      await sendMessage({
-        text: text.trim(),
-        image: imagePreview,
-      });
-
-      // Clear form
-      setText("");
-      setImagePreview(null);
-      if (fileInputRef.current) fileInputRef.current.value = "";
-    } catch (error) {
-      console.error("Failed to send message:", error);
+    const { selectedUser } = useChatStore.getState();
+    if (!selectedUser) {
+        toast.error("No user selected");
+        return;
     }
-  };
+
+    try {
+        await sendMessage({
+            text: text.trim(),
+            image: imagePreview,
+        });
+
+        // Clear form
+        setText("");
+        setImagePreview(null);
+        if (fileInputRef.current) fileInputRef.current.value = "";
+    } catch (error) {
+        console.error("Failed to send message:", error);
+    }
+};
 
   return (
     <div className="p-4 w-full">

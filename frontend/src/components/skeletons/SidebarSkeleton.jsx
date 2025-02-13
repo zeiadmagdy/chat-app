@@ -2,7 +2,7 @@ import { Users } from "lucide-react";
 
 const SidebarSkeleton = () => {
   // Create 8 skeleton items
-  console.log("SidebarSkeleton is rendering");
+
   const skeletonContacts = Array(8).fill(null);
 
   return (
