@@ -20,9 +20,8 @@ const ChatContainer = () => {
 
     // Fetch messages and subscribe to new messages when the selected user changes
     useEffect(() => {
-        console.log("Selected user:", selectedUser); // Debug log
         if (selectedUser?._id) {
-            console.log("Fetching messages for user:", selectedUser._id); // Debug log
+
             getMessages(selectedUser._id);
     
             // Subscribe to messages only if the selected user changes
