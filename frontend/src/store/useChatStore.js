@@ -55,37 +55,46 @@ export const useChatStore = create((set, get) => ({
 
     subscribeToMessages: () => {
         const socket = useAuthStore.getState().socket;
-    
         console.log("Subscribing to newMessage events"); // Debug log
-    
+
         // Clean up any existing listeners to avoid duplicates
         socket.off("newMessage");
-    
+
         socket.on("newMessage", (newMessage) => {
             console.log("New message received:", newMessage); // Debug log
-    
+
             const { authUser } = useAuthStore.getState();
-    
-            // If the message is for the current user, increment the notification count for the sender
+
+            // If the message is for the current user, play the notification sound
             if (newMessage.receiverId === authUser._id) {
-                set((state) => ({
-                    notificationCount: {
-                        ...state.notificationCount,
-                        [newMessage.senderId]: (state.notificationCount[newMessage.senderId] || 0) + 1,
-                    },
-                }));
+                const notificationSound = document.getElementById("notificationSound");
+                console.log("Notification sound element:", notificationSound); // Debug log
+                if (notificationSound) {
+                    notificationSound.play(); // Play the sound
+                }
+
+                // Increment the notification count for the sender
+                set((state) => {
+                    const currentCount = state.notificationCount[newMessage.senderId] || 0;
+                    return {
+                        notificationCount: {
+                            ...state.notificationCount,
+                            [newMessage.senderId]: currentCount + 1,
+                        },
+                    };
+                });
             }
-    
+
             // Add the new message to the messages list if the chat is open
             const { selectedUser } = get();
             if (selectedUser?._id === newMessage.senderId) {
-                set({
-                    messages: [...get().messages, newMessage],
-                });
+                set((state) => ({
+                    messages: [...state.messages, newMessage],
+                }));
             }
         });
     },
-    
+
     unsubscribeFromMessages: () => {
         const socket = useAuthStore.getState().socket;
         console.log("Unsubscribing from newMessage events"); // Debug log
