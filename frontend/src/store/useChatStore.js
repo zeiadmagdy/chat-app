@@ -55,20 +55,17 @@ export const useChatStore = create((set, get) => ({
 
     subscribeToMessages: () => {
         const socket = useAuthStore.getState().socket;
-        console.log("Subscribing to newMessage events"); // Debug log
 
         // Clean up any existing listeners to avoid duplicates
         socket.off("newMessage");
 
         socket.on("newMessage", (newMessage) => {
-            console.log("New message received:", newMessage); // Debug log
 
             const { authUser } = useAuthStore.getState();
 
             // If the message is for the current user, play the notification sound
             if (newMessage.receiverId === authUser._id) {
                 const notificationSound = document.getElementById("notificationSound");
-                console.log("Notification sound element:", notificationSound); // Debug log
                 if (notificationSound) {
                     notificationSound.play(); // Play the sound
                 }
@@ -97,7 +94,6 @@ export const useChatStore = create((set, get) => ({
 
     unsubscribeFromMessages: () => {
         const socket = useAuthStore.getState().socket;
-        console.log("Unsubscribing from newMessage events"); // Debug log
         socket.off("newMessage"); // Remove the event listener
     },
 

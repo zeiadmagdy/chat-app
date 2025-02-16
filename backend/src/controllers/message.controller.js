@@ -60,7 +60,6 @@ export const sendMessage = async (req, res) => {
         // Emit the newMessage event to the receiver
         const receiverSocketId = getReceiverSocketId(receiverId);
         if (receiverSocketId) {
-            console.log("Emitting newMessage to receiver:", receiverSocketId); // Debug log
             io.to(receiverSocketId).emit("newMessage", newMessage);
         }
 
